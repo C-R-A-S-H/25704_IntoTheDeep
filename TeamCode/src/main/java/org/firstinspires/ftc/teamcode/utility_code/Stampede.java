@@ -32,7 +32,7 @@ public class Stampede {
     public DcMotorEx odopodRight = null;
     public DcMotorEx odopodMiddle = null;
 
-    public String fl = "FL_motor";
+    public String fl = "FL_Motor";
     public String fr = "FR_Motor";
     public String rl = "BL_Motor";
     public String rr = "BR_Motor";
