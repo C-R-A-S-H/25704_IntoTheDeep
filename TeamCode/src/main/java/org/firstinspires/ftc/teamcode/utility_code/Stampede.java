@@ -190,7 +190,7 @@ public class Stampede {
             odopodMiddle = hwMap.get(DcMotorEx.class, "odomid");
         }
         // If using SparkFun otos pass true, otherwise pass false
-        if (false) {
+        if (true) {
             otos = hwMap.get(SparkFunOTOS.class, "otos");
             // put otos calibration values here
             configureOtos(-7.125, 0, -90, 3600.0 / (3600.0 + 15.6), 96.0 / 92.6);
