@@ -32,6 +32,14 @@ public class Stampede {
     public DcMotorEx odopodRight = null;
     public DcMotorEx odopodMiddle = null;
 
+    public String fl = "FL_motor";
+    public String fr = "FR_Motor";
+    public String rl = "BL_Motor";
+    public String rr = "BR_Motor";
+
+
+
+
     public SparkFunOTOS otos = null;
 
     boolean hasWheelEncoders = false;
@@ -157,10 +165,10 @@ public class Stampede {
      */
     public void initWheelHardware(boolean withEncoder) {
         // These PID values worked for us (using REV ultraplanetary motors)
-        driveFrontLeft = setUpEncoderMotor("fl", DcMotor.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
-        driveFrontRight = setUpEncoderMotor("fr", DcMotor.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
-        driveRearLeft = setUpEncoderMotor("rl", DcMotor.Direction.REVERSE, 12, 10, 0.0, 5.0, withEncoder);
-        driveRearRight = setUpEncoderMotor("rr", DcMotor.Direction.REVERSE, 12, 10, 0.0, 5.0, withEncoder);
+        driveFrontLeft = setUpEncoderMotor(fl, DcMotor.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
+        driveFrontRight = setUpEncoderMotor(fr, DcMotor.Direction.FORWARD, 12, 10, 0.0, 5.0, withEncoder);
+        driveRearLeft = setUpEncoderMotor(rl, DcMotor.Direction.REVERSE, 12, 10, 0.0, 5.0, withEncoder);
+        driveRearRight = setUpEncoderMotor(rr, DcMotor.Direction.REVERSE, 12, 10, 0.0, 5.0, withEncoder);
 
         hasWheelEncoders = withEncoder;
     }
