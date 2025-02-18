@@ -37,7 +37,8 @@ public class Stampede {
     public String rl = "BL_Motor";
     public String rr = "BR_Motor";
 
-
+    private double lastX = 0, lastY = 0, lastHeading = 0;  // For tracking position changes
+    private double deltaX = 0, deltaY = 0, deltaHeading = 0;  // Store the deltas
 
 
     public SparkFunOTOS otos = null;
@@ -304,6 +305,20 @@ public class Stampede {
         } else {
             // if we don't have wheel encoders or odopods, we must have an otos
             SparkFunOTOS.Pose2D currPos = otos.getPosition();
+
+            // Calculate deltas before updating current position
+            deltaX = currPos.x - xFieldPos;
+            deltaY = currPos.y - yFieldPos;
+            deltaHeading = currPos.h - headingField;
+
+            // Normalize heading delta to be between -180 and 180
+            if (deltaHeading > 180) {
+                deltaHeading -= 360;
+            } else if (deltaHeading < -180) {
+                deltaHeading += 360;
+            }
+
+            // Update current position
             xFieldPos = currPos.x;
             yFieldPos = currPos.y;
             headingField = currPos.h;
@@ -476,27 +491,44 @@ public class Stampede {
      *
      * @param telemetry
      */
-    public void reportTelemetry(Telemetry telemetry){
+    public void reportTelemetry(Telemetry telemetry) {
         if(hasWheelEncoders){
-            telemetry.addData("Wheel Encoder Postions", "fl: %d, fr: %d, rl: %d, rr: %d",
+            telemetry.addData("Wheel Encoder Positions", "fl: %d, fr: %d, rl: %d, rr: %d",
                     driveFrontLeft.getCurrentPosition(), driveFrontRight.getCurrentPosition(),
                     driveRearLeft.getCurrentPosition(), driveRearRight.getCurrentPosition());
         }
         if(odopodLeft != null){
-            telemetry.addData("Odo Pod Postions", "left: %d, middle: %d, right: %d",
+            telemetry.addData("Odo Pod Positions", "left: %d, middle: %d, right: %d",
                     odopodLeft.getCurrentPosition(), odopodMiddle.getCurrentPosition(),
                     odopodRight.getCurrentPosition());
         }
         if(otos != null){
             SparkFunOTOS.Pose2D pos = otos.getPosition();
-            telemetry.addData("OTOS Postions", "x: %4.2f, y: %4.2f, heading: %4.2f",
+            telemetry.addData("OTOS Position", "x: %.2f, y: %.2f, h: %.2f",
                     pos.x, pos.y, pos.h);
+
+            // Add delta movement data using our calculated values
+            telemetry.addData("OTOS Delta", "dx: %.2f, dy: %.2f, dh: %.2f",
+                    deltaX, deltaY, deltaHeading);
         }
         if (angleTracker != null) {
             double totalRotationInDeg = angleTracker.getOrientation();
-            telemetry.addData("Heading", "%5.2f", ((totalRotationInDeg % 360) + 360) % 360);
+            telemetry.addData("Heading", "%.2f", ((totalRotationInDeg % 360) + 360) % 360);
         }
-        telemetry.addData("Field Postion", "x: %4.2f, y: %4.2f, heading: %4.2f",
+        telemetry.addData("Field Position", "x: %.2f, y: %.2f, heading: %.2f",
                 xFieldPos, yFieldPos, headingField);
     }
+    public double getDeltaX() {
+        return deltaX;
+    }
+
+    public double getDeltaY() {
+        return deltaY;
+    }
+
+    public double getDeltaHeading() {
+        return deltaHeading;
+    }
+
+
     }
